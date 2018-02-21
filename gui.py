@@ -109,16 +109,25 @@ class Ui_MainWindow(object):
         self.actionExit.triggered.connect(self.goOut)
         self.actionRemove_Network.triggered.connect(self.clearFiles)
         self.applyButton.clicked.connect(self.applyButtonClicked)
+        self.eValueSlider.valueChanged.connect(self.displayChange)
+        self.eValueHolder.setText(str(self.eValueSlider.value()))
+
 
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def applyButtonClicked(self):
-        anonimizeDegreeSequence = anonimizer(self.graph,epsilon)
-        drawHistogram(anonimizeDegreeSequence,"modifiedHistogram")
-        self.modifiedHistogramHolder.setPixmap(QtGui.QPixmap('images/modifiedHistogram.png'))
+        if list(self.graph.nodes) == [] and list(self.graph.edges) == []:
+            print("The Graph is Empty.")
+        else:
+            epsilon = float(self.eValueHolder.text())
+            anonimizeDegreeSequence = anonimizer(self.graph,epsilon)
+            drawHistogram(anonimizeDegreeSequence,"modifiedHistogram")
+            self.modifiedHistogramHolder.setPixmap(QtGui.QPixmap('images/modifiedHistogram.png'))
 
+    def displayChange(self,val):
+        self.eValueHolder.setText(str(val))
 
     def nodeOpener(self):
         nodeFile = self.fileOpener()
