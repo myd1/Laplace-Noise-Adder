@@ -43,3 +43,9 @@ def generateNetwork(nodes,edges,graph):
    graph.add_edges_from(edges)
    drawGraph(graph)
    return graph
+
+def getstats(graph):
+  mainstring = "Stats:\n"
+  mainstring += "No of Nodes : "+str(len(graph))+"\n"
+  mainstring += "No of Edges : "+str(graph.number_of_edges())+"\n"
+  return mainstring

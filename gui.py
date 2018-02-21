@@ -104,6 +104,8 @@ class Ui_MainWindow(object):
         # custom code starts from here
         self.actionAdd_Node.triggered.connect(self.nodeOpener)
         self.actionAdd_Edge.triggered.connect(self.edgeOpener)
+        self.actionExit.triggered.connect(self.goOut)
+        self.actionRemove_Network.triggered.connect(self.clearFiles)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -129,9 +131,18 @@ class Ui_MainWindow(object):
     def plotNetwork(self):
         graph = generateNetwork(self.nodes,self.edges,self.graph)
         self.socialNetworkHolder.setPixmap(QtGui.QPixmap('images/network.png'))
-        # statstring, avgDegree , avgPathLenght , avgClustering , edgeBetweeness = getstats(graph)
-        # self.statsHolder.setPlainText(statstring.format(avgDegree,avgPathLenght,avgClustering,edgeBetweeness))
+        statstring = getstats(graph)
+        self.statsHolder.setPlainText(statstring)
         return graph
+
+    def clearFiles(self):
+        self.nodes = []
+        self.edges = []
+        self.graph = clearNetwork(self.graph)
+        self.graph = self.plotNetwork()
+
+    def goOut(self):
+        sys.exit()
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
