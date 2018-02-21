@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-
+from numpy import exp
 def nodeReader(fileName , nodes):
    try:
       with open(fileName,"r") as file:
