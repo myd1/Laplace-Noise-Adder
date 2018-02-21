@@ -67,7 +67,6 @@ def globalSensitivity(graph):
          temp.append(0)
       vectors.append(temp)
       temp1 = manhattan_distance(vectors[0],vectors[len(vectors)-1])
-      print (temp1)
       if(temp1 > gs):
          gs = temp1        
    return gs      
