@@ -49,7 +49,7 @@ def getstats(graph):
   mainstring += "No of Nodes : "+str(len(graph))+"\n"
   mainstring += "No of Edges : "+str(graph.number_of_edges())+"\n"
   mainstring += "Global Sensitivity : "+str(globalSensitivity(graph))
-  return mainstring
+  return mainstring , globalSensitivity(graph)
 
 def manhattan_distance(x,y):
    return sum(abs(a-b) for a,b in zip(x,y))
@@ -92,3 +92,5 @@ def drawHistogram(arr,fileName):
    plt.grid(linestyle='-', linewidth=0.1)
    plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)
 
+def anonimizer(graph,epsilon):
+   pass

@@ -8,6 +8,7 @@
 
 from PyQt4 import QtCore, QtGui
 from backend import *
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
 
     nodes = []
-    edges = [] 
+    edges = []
     graph = nx.Graph()
 
     def setupUi(self, MainWindow):
@@ -35,6 +36,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.eValueSlider = QtGui.QSlider(self.centralwidget)
         self.eValueSlider.setGeometry(QtCore.QRect(20, 50, 160, 29))
+        self.eValueSlider.setMaximum(100)
         self.eValueSlider.setOrientation(QtCore.Qt.Horizontal)
         self.eValueSlider.setObjectName(_fromUtf8("eValueSlider"))
         self.titleText = QtGui.QLineEdit(self.centralwidget)
@@ -101,14 +103,22 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionRemove_Network)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
-        # custom code starts from here
+        # custom code starts here
         self.actionAdd_Node.triggered.connect(self.nodeOpener)
         self.actionAdd_Edge.triggered.connect(self.edgeOpener)
         self.actionExit.triggered.connect(self.goOut)
         self.actionRemove_Network.triggered.connect(self.clearFiles)
+        self.applyButton.clicked.connect(self.applyButtonClicked)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def applyButtonClicked(self):
+        anonimizeDegreeSequence = anonimizer(self.graph,epsilon)
+        drawHistogram(anonimizeDegreeSequence,"modifiedHistogram")
+        self.modifiedHistogramHolder.setPixmap(QtGui.QPixmap('images/modifiedHistogram.png'))
+
 
     def nodeOpener(self):
         nodeFile = self.fileOpener()
@@ -133,7 +143,7 @@ class Ui_MainWindow(object):
         self.socialNetworkHolder.setPixmap(QtGui.QPixmap('images/network.png'))
         drawHistogram(nx.degree_histogram(graph),"originalHistogram")
         self.originalHistogramHolder.setPixmap(QtGui.QPixmap('images/originalHistogram.png'))
-        statstring = getstats(graph)
+        statstring, globalSensitivity = getstats(graph)
         self.statsHolder.setPlainText(statstring)
         return graph
 
