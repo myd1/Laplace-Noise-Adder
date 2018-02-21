@@ -72,3 +72,5 @@ def globalSensitivity(graph):
          gs = temp1        
    return gs      
 
+def noise(x, u, e, f):
+   return (e/2*f)*exp(-abs(x-u)*e/F)
