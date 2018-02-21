@@ -48,6 +48,7 @@ def getstats(graph):
   mainstring = "Stats:\n"
   mainstring += "No of Nodes : "+str(len(graph))+"\n"
   mainstring += "No of Edges : "+str(graph.number_of_edges())+"\n"
+  mainstring += "Global Sensitivity : "+str(globalSensitivity(graph))
   return mainstring
 
 def manhattan_distance(x,y):
@@ -67,8 +68,22 @@ def globalSensitivity(graph):
          temp.append(0)
       vectors.append(temp)
       temp1 = manhattan_distance(vectors[0],vectors[len(vectors)-1])
-      print (temp1)
       if(temp1 > gs):
          gs = temp1        
    return gs      
 
+def drawHistogram(arr,fileName):
+
+   # fig = plt.figure(figsize=(13, 7), dpi=100, tight_layout=True)
+   #  360 × 270 pix ==  4 × 3 inc , 100 dpi
+   # 1280 × 720 pix ==  13 × 7 inc , 100 dpi
+   n = len(arr)
+   x = range(n)
+   plt.bar(x,arr,align='center',width=0.1) 
+   plt.xticks(x)
+   plt.yticks(arr)
+   plt.xlabel('Degree')
+   plt.ylabel('number of node')
+   plt.grid(True)
+   plt.grid(linestyle='-', linewidth=0.1)
+   plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)

@@ -131,6 +131,8 @@ class Ui_MainWindow(object):
     def plotNetwork(self):
         graph = generateNetwork(self.nodes,self.edges,self.graph)
         self.socialNetworkHolder.setPixmap(QtGui.QPixmap('images/network.png'))
+        drawHistogram(nx.degree_histogram(graph),"originalHistogram")
+        self.originalHistogramHolder.setPixmap(QtGui.QPixmap('images/originalHistogram.png'))
         statstring = getstats(graph)
         self.statsHolder.setPlainText(statstring)
         return graph
