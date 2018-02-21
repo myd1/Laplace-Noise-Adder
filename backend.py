@@ -91,6 +91,8 @@ def drawHistogram(arr,fileName):
    plt.grid(True)
    plt.grid(linestyle='-', linewidth=0.1)
    plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)
+   plt.gcf().clear()
+   
 
 def anonimizer(graph,epsilon):
    degreeSeq = nx.degree_histogram(graph)
