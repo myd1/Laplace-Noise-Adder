@@ -73,8 +73,8 @@ def globalSensitivity(graph):
    return gs      
 
 
-def noise(x, u, e, f):
-   return (e/2*f)*exp(-abs(x-u)*e/F)
+def noise(x, mean, epsilon, glblSenstvt):
+   return (epsilon/2*glblSenstvt)*exp(-abs(x-mean)*epsilon/glblSenstvt)
 
 def drawHistogram(arr,fileName):
 
@@ -93,4 +93,9 @@ def drawHistogram(arr,fileName):
    plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)
 
 def anonimizer(graph,epsilon):
-   pass
+   degreeSeq = nx.degree_histogram(graph)
+   mean = sum(degreeSeq)/len(degreeSeq)
+   glblSenstvt = globalSensitivity(graph)
+   for x in range(len(degreeSeq)):
+      degreeSeq[x] += noise(x, mean, epsilon, glblSenstvt)
+   return degreeSeq   
