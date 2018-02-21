@@ -49,3 +49,26 @@ def getstats(graph):
   mainstring += "No of Nodes : "+str(len(graph))+"\n"
   mainstring += "No of Edges : "+str(graph.number_of_edges())+"\n"
   return mainstring
+
+def manhattan_distance(x,y):
+   return sum(abs(a-b) for a,b in zip(x,y))
+
+def globalSensitivity(graph):
+   gs = 0
+   graph1 = graph.copy()
+   nodes = graph.nodes()
+   vectors = []
+   vectors.append(nx.degree_histogram(graph1))
+   for node in nodes:
+      graph1 = graph.copy()
+      graph1.remove_node(node)
+      temp = nx.degree_histogram(graph1)
+      while(len(temp) < len(vectors[0])):
+         temp.append(0)
+      vectors.append(temp)
+      temp1 = manhattan_distance(vectors[0],vectors[len(vectors)-1])
+      print (temp1)
+      if(temp1 > gs):
+         gs = temp1        
+   return gs      
+
