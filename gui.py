@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-
+from backend import *
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -23,6 +23,11 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
+
+    nodes = []
+    edges = [] 
+    graph = nx.Graph()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(840, 659)
@@ -96,9 +101,37 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionRemove_Network)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
+        # custom code starts from here
+        self.actionAdd_Node.triggered.connect(self.nodeOpener)
+        self.actionAdd_Edge.triggered.connect(self.edgeOpener)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def nodeOpener(self):
+        nodeFile = self.fileOpener()
+        self.nodes = nodeReader(nodeFile,self.nodes)
+        self.graph = self.plotNetwork()
+
+    def edgeOpener(self):
+        edgeFile = self.fileOpener()
+        self.edges = edgeReader(edgeFile,self.edges)
+        self.graph = self.plotNetwork()
+
+    def fileOpener(self):
+        dlg = QtGui.QFileDialog()
+        dlg.setFileMode(QtGui.QFileDialog.AnyFile)
+        dlg.setFilter("Text files (*.txt)")
+        dlg.exec_()
+        fileNames = dlg.selectedFiles()
+        return (fileNames[0])
+
+    def plotNetwork(self):
+        graph = generateNetwork(self.nodes,self.edges,self.graph)
+        self.socialNetworkHolder.setPixmap(QtGui.QPixmap('images/network.png'))
+        # statstring, avgDegree , avgPathLenght , avgClustering , edgeBetweeness = getstats(graph)
+        # self.statsHolder.setPlainText(statstring.format(avgDegree,avgPathLenght,avgClustering,edgeBetweeness))
+        return graph
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
