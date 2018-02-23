@@ -100,7 +100,7 @@ def scaleValues( arr ):
 		return arr
 
 
-def drawHistogram(arr,fileName):
+def drawHistogram(arr,fileName,directory):
 
 	# fig = plt.figure(figsize=(13, 7), dpi=100, tight_layout=True)
 	#  360 × 270 pix ==  4 × 3 inc , 100 dpi
@@ -114,7 +114,7 @@ def drawHistogram(arr,fileName):
 	plt.yticks(arr)
 	plt.xlabel('Degree')
 	plt.ylabel('number of node')
-	plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)
+	plt.savefig(directory+fileName+".png",figsize=(6,4.5),dpi=57)
 	plt.gcf().clear()
 	
 
