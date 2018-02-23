@@ -17,11 +17,11 @@ class MyWindow(QtGui.QMainWindow):
 		self.actionRemove_Network.triggered.connect(self.clearFiles)
 		self.applyButton.clicked.connect(self.applyButtonClicked)
 		self.eValueSlider.valueChanged.connect(self.displayChange)
-		self.eValueHolder.setText(str(self.eValueSlider.value()))
+		self.eValueHolder.setText(str(self.eValueSlider.value()/100.0))
 		self.show()
 
 	def applyButtonClicked(self):
-		if list(self.graph.nodes) == [] and list(self.graph.edges) == []:
+		if isEmpty(self.graph):
 			print("The Graph is Empty.")
 		else:
 			epsilon = float(self.eValueHolder.text())
@@ -30,7 +30,7 @@ class MyWindow(QtGui.QMainWindow):
 			self.modifiedHistogramHolder.setPixmap(QtGui.QPixmap('images/modifiedHistogram.png'))
 
 	def displayChange(self,val):
-		self.eValueHolder.setText(str(val))
+		self.eValueHolder.setText(str(val/100.0))
 
 	def nodeOpener(self):
 		nodeFile = self.fileOpener()
@@ -53,16 +53,25 @@ class MyWindow(QtGui.QMainWindow):
 	def plotNetwork(self):
 		graph = generateNetwork(self.nodes,self.edges,self.graph)
 		self.socialNetworkHolder.setPixmap(QtGui.QPixmap('images/network.png'))
-		drawHistogram(nx.degree_histogram(graph),"originalHistogram")
+		data = []
+		try :
+			data = nx.degree_histogram(graph)
+		except ValueError :
+			data = [0]
+		drawHistogram(data,"originalHistogram")
 		self.originalHistogramHolder.setPixmap(QtGui.QPixmap('images/originalHistogram.png'))
-		statstring, globalSensitivity = getstats(graph)
-		self.statsHolder.setPlainText(statstring)
+		statstring, globalSensitivity, averageDegree = getstats(graph)
+		self.statsHolder.setPlainText(statstring.format(averageDegree))
 		return graph
 
 	def clearFiles(self):
 		self.nodes = []
 		self.edges = []
 		self.graph = clearNetwork(self.graph)
+		statstring, globalSensitivity, averageDegree = getstats(self.graph)
+		self.statsHolder.setPlainText(statstring.format(averageDegree))
+		drawHistogram([0],"modifiedHistogram")
+		self.modifiedHistogramHolder.setPixmap(QtGui.QPixmap('images/modifiedHistogram.png'))
 		self.graph = self.plotNetwork()
 
 	def goOut(self):
