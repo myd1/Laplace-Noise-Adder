@@ -76,6 +76,17 @@ def globalSensitivity(graph):
 def noise(x, mean, epsilon, glblSenstvt):
    return (epsilon/2*glblSenstvt)*exp(-abs(x-mean)*epsilon/glblSenstvt)
 
+
+def scaleValues( arr ):
+   u = []
+   if max(arr) >= 10 :
+      for t in range(1,6):
+         u.append(round(max(arr)*t/5))
+      return u
+   else :
+      return arr
+
+
 def drawHistogram(arr,fileName):
 
    # fig = plt.figure(figsize=(13, 7), dpi=100, tight_layout=True)
@@ -83,13 +94,13 @@ def drawHistogram(arr,fileName):
    # 1280 × 720 pix ==  13 × 7 inc , 100 dpi
    n = len(arr)
    x = range(n)
-   plt.bar(x,arr,align='center',width=0.1) 
+   plt.bar(x,arr,align='center',width=0.95)
+   x = scaleValues(x)
    plt.xticks(x)
+   arr = scaleValues(arr)
    plt.yticks(arr)
    plt.xlabel('Degree')
    plt.ylabel('number of node')
-   plt.grid(True)
-   plt.grid(linestyle='-', linewidth=0.1)
    plt.savefig("images/"+fileName+".png",figsize=(6,4.5),dpi=57)
    plt.gcf().clear()
    
@@ -100,4 +111,5 @@ def anonimizer(graph,epsilon):
    glblSenstvt = globalSensitivity(graph)
    for x in range(len(degreeSeq)):
       degreeSeq[x] += noise(x, mean, epsilon, glblSenstvt)
+      degreeSeq[x] = round(degreeSeq[x])
    return degreeSeq   
